@@ -1,0 +1,41 @@
+{
+    "diamonds": [
+      {
+        "id": 1,
+        "quantity": 100,
+        "price": 19.999,
+        "image_src": "https://example.com/diamond100.jpg"
+      },
+      {
+        "id": 2,
+        "quantity": 250,
+        "price": 36.999,
+        "image_src": "https://example.com/diamond500.jpg"
+      },
+      {
+        "id": 3,
+        "quantity": 500,
+        "price": 68.999,
+        "image_src": "https://example.com/diamond1000.jpg"
+      },
+      {
+        "id": 4,
+        "quantity": 1000,
+        "price": 134.999,
+        "image_src": "https://example.com/diamond2000.jpg"
+      },
+      {
+        "id": 5,
+        "quantity": 5000,
+        "price": 249.099,
+        "image_src": "https://example.com/diamond5000.jpg"
+      },
+      {
+        "id": 5,
+        "quantity": 10000,
+        "price": 515.999,
+        "image_src": "https://example.com/diamond5000.jpg"
+      }
+    ]
+  }
+  

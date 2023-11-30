@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import LottieView from "lottie-react-native";
 
 // dummy
@@ -9,37 +9,79 @@ import { Input, InputField } from "@gluestack-ui/themed";
 // icons
 import { FontAwesome } from "@expo/vector-icons";
 import { ButtonText } from "@gluestack-ui/themed";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import { AntDesign } from "@expo/vector-icons";
 import api from "../libs/Api";
 import { useFetchAvatar } from "../hooks/useAvatar";
+import useUpdateProfile from "../hooks/useUpdateProfile";
+import { useForm } from "react-hook-form";
 
+export type AvatarData = {
+  id: number;
+  image_src: string;
+  price: number;
+  created_at: string;
+  updated_at: string;
+};
 
-const AvatarScreen = ({navigation} : any) => {
+const AvatarScreen = ({ navigation }: any) => {
 
+  const {user} = useUser();
+  console.log(user?.emailAddresses[0].emailAddress);
+  
   // goToStartGame Route
   const goToStartGame = () => {
     navigation.navigate("StartGame");
   };
-  
+
   const { signOut, isSignedIn } = useAuth();
 
-  const {avatars, isLoading, isError, refetch} = useFetchAvatar();
-  // console.log(avatars);
+  const [selected, setSelected] = useState<any>(null);
+  const { isLoading, avatars } = useFetchAvatar();
 
-  
-
+  const [userName, setUserName] = useState<any>();
 
   const data = avatars?.data;
+
+  const freeAvatars = data?.filter((avatar: AvatarData) => avatar.price === 0);
+
+  const { isUpdating, updateProfile } = useUpdateProfile();
+
+  const selectedAvatar = freeAvatars?.find(
+    (avatar: AvatarData) => avatar.id === selected
+  );
+
+  function handleSelected(avatarId: number) {
+    setSelected((prevSelected: number) =>
+      prevSelected === avatarId ? null : avatarId
+    );
+  }
+  // console.log(selected);
+
+  const {control ,handleSubmit, formState: {errors}} = useForm();
+
+  function onSubmit() {
+    
+    updateProfile({
+      username: userName,
+      current_avatar: selected,
+      total_points: 0,
+      diamonds: 0,
+      email: user?.emailAddresses[0].emailAddress,
+      name: user?.fullName
+    });
+    setTimeout(() => {
+      navigation.navigate("StartGame");
+    }, 1000);
+  }
+
+
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+  console.log(userName);
   
-
-  if(isLoading) {
-    return <Text>Loading...</Text>
-  }
-
-  if(isError) {
-    <Text>Error...</Text>
-  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -150,11 +192,11 @@ const AvatarScreen = ({navigation} : any) => {
           </Text>
           <FlatList
             style={{ flex: 1, marginTop: 20 }}
-            data={data.data}
+            data={data}
             numColumns={4}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={(e) => handleSelected(item.id)}>
                 <Image
                   source={{ uri: item.image_src }}
                   style={{
@@ -167,7 +209,6 @@ const AvatarScreen = ({navigation} : any) => {
               </TouchableOpacity>
             )}
           />
-
           <Input
             style={{
               borderWidth: 1,
@@ -181,9 +222,11 @@ const AvatarScreen = ({navigation} : any) => {
               display: "flex",
               flexDirection: "row",
             }}
+            
             isDisabled={false}
             isInvalid={false}
             isReadOnly={false}
+            
           >
             <FontAwesome
               style={{ marginRight: 10 }}
@@ -191,7 +234,7 @@ const AvatarScreen = ({navigation} : any) => {
               size={24}
               color="black"
             />
-            <InputField placeholder="Your Name" />
+            <InputField onChangeText={(value: any)=> setUserName(value)} placeholder="Your Name" />
           </Input>
           <TouchableOpacity
             style={{
@@ -201,7 +244,7 @@ const AvatarScreen = ({navigation} : any) => {
               backgroundColor: "green",
               borderRadius: 10,
             }}
-            onPress={goToStartGame}
+            onPress={handleSubmit(onSubmit)}
           >
             <ButtonText
               style={{ color: "white", padding: 10, textAlign: "center" }}

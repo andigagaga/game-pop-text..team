@@ -1,0 +1,26 @@
+{/* <View
+        style={{
+          backgroundColor: "#96EFFF",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <LottieView
+          source={require("../../assets/lottieFiles/Animation - 1701162573420.json")}
+          loop={true}
+          autoPlay={true}
+          resizeMode="cover"
+          style={{ width: 200, height: "auto", marginTop: 20 }}
+        />
+      </View>
+      <View
+        style={{
+          flex: 7,
+          backgroundColor: "#96EFFF",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+      </View> */}

@@ -5,7 +5,7 @@ import StartGame from "../components/StartGame";
 import QuizGame from "../components/QuizGame";
 import AvatarScreen from "../components/AvatarScreen";
 import { useAuth } from "@clerk/clerk-expo";
-import Diamonds from "../components/Diamonds";
+import Diamonds from "../PopUpModal/Diamonds";
 
 const Stack = createNativeStackNavigator();
 

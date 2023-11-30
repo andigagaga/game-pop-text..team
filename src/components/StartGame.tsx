@@ -1,22 +1,26 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import LottieView from "lottie-react-native";
 
 // icon
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 
-import {
-  Avatar,
-  AvatarImage,
-  ButtonGroup,
-} from "@gluestack-ui/themed";
+import { Avatar, AvatarImage, ButtonGroup } from "@gluestack-ui/themed";
+import useUpdateProfile from "../hooks/useUpdateProfile";
+import { useFetchAvatar } from "../hooks/useAvatar";
 // import { ImageBackground } from "react-native";
 
-const StartGame = ({ navigation }: any) => {
+export type AvatarData = {
+  id: number;
+  image_src: string;
+  price: number;
+  created_at: string;
+  updated_at: string;
+};
 
-  // const goToDiamonds = () => {
-  //   navigation.vavigate("Diamonds");  
-  // }
+const StartGame = ({ navigation }: any) => {
+  const [selected, setSelected] = useState<any>(null);
+  const { isLoading, avatars } = useFetchAvatar();
 
   const goToDiamonds = () => {
     navigation.navigate("Diamonds");
